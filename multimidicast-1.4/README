@@ -1,0 +1,71 @@
+multimidicast v1.4 (c) 2005..2018 by Dirk Jagdmann <doj@cubic.org>
+-------------------------------------------------------------------
+
+Will send and receive MIDI data from ALSA sequencers to your network using
+UDP multicast. If this does not seem to work make sure that multicast
+is supported by your kernel.
+
+The software is designed to be compatible with ipMIDI for windows from
+http://nerds.de
+
+Command line options:
+-i <interface> - use a specific network interface.
+-q - quiet, don't show MIDI and network events, can be given multiple
+     times to decrease reporting.
+-b <bytes> - set MIDI buffer size, default: 250000 bytes
+
+Usage:
+
+If you only have a single network interface, simply start the compiled
+multimidicast program. If you have multiple network interfaces and
+want to use multimidicast on a specific interface, use the -i command
+line argument.
+
+$ multimidicast
+multimidicast v1.4 (c) 2005..2018 by Dirk Jagdmann <doj@cubic.org>
+waiting for events...
+
+After you have started the multimidicast program, you will see new
+MIDI ports in the ALSA list. Use a 2nd Linux terminal (shell), so the
+multimidicast program keeps running.
+
+$ aconnect -l
+client 0: 'System' [type=kernel]
+    0 'Timer           '
+    1 'Announce        '
+client 129: './multimidicast' [type=user]
+    0 '225.0.0.37:21928'
+    1 '225.0.0.37:21929'
+    ...
+
+Use any ALSA midi program and connect the ALSA MIDI port 129:X to your
+midi program. You can use the aconnect command line program or a
+graphical program like qjackctl.
+
+Do the same on a second computer and the MIDI messages will be
+transported over your local network. Since the multimidicast program
+uses IP multicasting you don't need to do any configuration to route
+messages between your computers.
+
+------------------------------------------------------------------------------
+
+Technical information:
+
+this program will subscribe to the IPv4 multicast address 225.0.0.37
+and UDP port 21928. Any bytes received are interpreted as a raw MIDI
+byte stream and made available to an ALSA MIDI port. Additional MIDI
+ports are using UDP port 21929, 21930, ...
+
+When this program receives data on a ALSA MIDI port, it will send the
+raw byte stream as UDP multicast datagrams to the network.
+
+------------------------------------------------------------------------------
+
+Install:
+
+If you have a working compiler and ALSA development files, simply run "make"
+to compile the source code. Run "make install" to install the program into
+the /usr/bin/ directory.
+
+On debian (Ubuntu) Linux you can use the debian-install.sh script to install
+the compiler and ALSA libraries.

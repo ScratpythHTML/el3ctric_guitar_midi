@@ -1,0 +1,8 @@
+- new command line argument to connect to other local ALSA midi ports
+- UDP truncation: can be detected by using recvmsg() and watching for
+  MSG_TRUNC flag. But the truncated data is usually lost, so what
+  should we do in this case?
+- What to do with big sysex data? What does ipMIDI do?
+- https://en.wikipedia.org/wiki/RTP-MIDI
+- http://www.tobias-erichsen.de/software/rtpmidi.html
+- use a general file/file descriptor for midi data (OSS raw midi or serial port)
